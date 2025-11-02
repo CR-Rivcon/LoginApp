@@ -7,7 +7,7 @@ export default function Perfil() {
   const router = useRouter();
 
   const handleVolver = () => {
-    // Ir al tab de inicio sin intentar "volver" en el stack
+
     router.replace('/(tabs)');
   };
 

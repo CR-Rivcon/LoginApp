@@ -48,3 +48,12 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Demo de login
+
+<video controls width="720" poster="./video/thumbnail.png">
+  <source src="./video/login-demo.mp4" type="video/mp4">
+  Tu navegador no soporta la etiqueta <code>video</code>. Puedes descargar el video aquí:
+  [Descargar demo](./video/login-demo.mp4)
+</video>
+
