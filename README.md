@@ -51,8 +51,8 @@ Join our community of developers creating universal apps.
 
 ## Demo de login
 
-<video controls width="720" poster="./video/thumbnail.png">
-  <source src="./video/login-demo.mp4" type="video/mp4">
+<video controls width="720">
+  <source src="https://raw.githubusercontent.com/CR-Rivcon/LoginApp/main/video/login-demo.mp4" type="video/mp4">
   Tu navegador no soporta la etiqueta <code>video</code>. Puedes descargar el video aquí:
   [Descargar demo](./video/login-demo.mp4)
 </video>
