@@ -57,3 +57,6 @@ Join our community of developers creating universal apps.
   [Descargar demo](./video/login-demo.mp4)
 </video>
 
+
+
+[Video funcionamiento:]( https://ipciisa-my.sharepoint.com/:v:/g/personal/cristopher_rivera_concha_estudiante_ipss_cl/ER8_BD703GdGtWSNAH7uoLEB6pINSMZt4Z63u_TIQLE3VA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=L1gzYt)
