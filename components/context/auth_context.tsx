@@ -13,6 +13,7 @@ const ExpectedUsers: Cred[] = [
   { id: '1', name: 'cris', password: '1234' },
   { id: '2', name: 'root', password: 'root' },
   { id: '3', name: 'admin', password: 'admin' },
+  { id: '4', name: 'cris@ipss.cl', password: '1234' },
 ];
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
