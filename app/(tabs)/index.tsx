@@ -59,8 +59,6 @@ if (creatingNew) {
 return (
 
 
-//Componentes visuales
-
     <SafeAreaView style={styles.container}>
       <Title>To do List</Title>
       {todos.map((task) => (
@@ -77,7 +75,6 @@ return (
       </TouchableOpacity>
     </SafeAreaView>
 
-//Componentes visuales
   );
 }
 

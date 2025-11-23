@@ -35,7 +35,6 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
                 }
             }
             const result = await launchCameraAsync({
-                mediaTypes: ['images'],
                 quality: 0.7,
                 allowsEditing: false,
                 exif: false,
@@ -65,6 +64,7 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
                     latitude: locationResult.coords.latitude.toFixed(6),
                     longitude: locationResult.coords.longitude.toFixed(6),
                 };
+            }
             } catch (locationError) {
                 console.error("Error obteniendo la ubicación", locationError);
             }
@@ -74,7 +74,7 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
                 title: taskTitle,
                 completed: false,
                 photoUri: photoUri || undefined,
-                coordinates?: location || {
+                coordinates: location || {
                     latitude: '1.234567',
                     longitude: '-2.345678',
                 }
