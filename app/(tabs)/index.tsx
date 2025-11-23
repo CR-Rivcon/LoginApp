@@ -1,9 +1,10 @@
+import NewTask from '@/components/new-task';
 import { TaskItem } from '@/components/task-item';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import Title from '@/components/ui/title';
 import { Task } from '@/constants/types';
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import generateRandomId from '../utils/generate-random-id';
 
@@ -21,15 +22,10 @@ export default function Home() {
 
 
 
-  const addTodo = (title : string) => {
-    if (title.trim().length === 0) return;
-
-    const newTodo: Task = {
-      id: generateRandomId(),
-      title,
-      completed: false,
-    };
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+  const createTask = (task : Task) => {
+    if (task.title.trim().length === 0) return;
+    setTodos((prevTodos) => [...prevTodos, task]);
+    setCreatingNew(false);
   }
 
 
@@ -46,17 +42,18 @@ export default function Home() {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   }
 
+const handleNewTaskClose = () => {
+    setCreatingNew(false);
+  }
+
+
+
+
+
 if (creatingNew) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={{ marginBottom: 16 }}>
-          <Title>Agregar Nueva Tarea</Title>
-        </View>
-        <TouchableOpacity style={{ backgroundColor: '#007AFF', padding: 12, borderRadius: 8 }} onPress={() => {setCreatingNew(false);
-        }}>
-          <Text style={{ color: '#FFFFFF', fontSize: 16, textAlign: 'center' }}>Volver</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
+    <SafeAreaView style={styles.container}>
+    <NewTask onClose={handleNewTaskClose} onTaskSave={createTask} /></SafeAreaView>
     );
   }
 return (

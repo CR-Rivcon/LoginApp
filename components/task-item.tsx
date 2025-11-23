@@ -1,6 +1,7 @@
 import { Task } from "@/constants/types";
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { IconSymbol } from "./ui/icon-symbol";
+
 
 interface TaskItemProps {
 task: Task;
@@ -16,6 +17,14 @@ export function TaskItem({ task, onToggle, onRemove }: TaskItemProps) {
         onPress={() => onToggle?.(task.id)}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       />
+      <View>
+      {task.photoUri && (
+        <Image
+          source={{ uri: task.photoUri }}
+          style={{ width: 50, height: 50, borderRadius: 8, marginBottom: 4, marginRight: 8 }}
+        />
+      )}
+      </View>
       <Text style={[styles.title, task.completed && styles.completedTitle]}>
         {task.title}
       </Text>
