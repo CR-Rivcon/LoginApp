@@ -3,7 +3,7 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import Title from '@/components/ui/title';
 import { Task } from '@/constants/types';
 import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import generateRandomId from '../utils/generate-random-id';
 
@@ -16,7 +16,7 @@ const initialTodos: Task[] = [
 export default function Home() {
 
   const [todos, setTodos] = useState<Task[]>(initialTodos);
-  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+  const [creatingNew, setCreatingNew] = useState<boolean>(false);
 
 
 
@@ -30,7 +30,6 @@ export default function Home() {
       completed: false,
     };
     setTodos((prevTodos) => [...prevTodos, newTodo]);
-    setNewTaskTitle('');
   }
 
 
@@ -47,7 +46,20 @@ export default function Home() {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   }
 
-  return (
+if (creatingNew) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ marginBottom: 16 }}>
+          <Title>Agregar Nueva Tarea</Title>
+        </View>
+        <TouchableOpacity style={{ backgroundColor: '#007AFF', padding: 12, borderRadius: 8 }} onPress={() => {setCreatingNew(false);
+        }}>
+          <Text style={{ color: '#FFFFFF', fontSize: 16, textAlign: 'center' }}>Volver</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
+return (
 
 
 //Componentes visuales
@@ -62,21 +74,10 @@ export default function Home() {
         onRemove={removeTodo}
         />
       ))}
-  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-  <TextInput
-    style={{ flex: 1, borderWidth: 1, borderColor: '#ccc', borderRadius: 4, padding: 8 }}
-    placeholder="Nueva tarea"
-    value={newTaskTitle}
-    onChangeText={setNewTaskTitle}
-    onSubmitEditing={() => addTodo(newTaskTitle)}
-  />
-  <TouchableOpacity 
-    style={{ marginLeft: 8, height: 40, justifyContent: 'center' }} 
-    onPress={() => addTodo(newTaskTitle)}
-  >
-    <IconSymbol name="plus.circle.fill" size={40} color="#00ac70" />
-  </TouchableOpacity>
-</View>
+    <TouchableOpacity style={styles.newTaskButton} onPress={() => setCreatingNew(true)}>
+      <IconSymbol name="plus" size={32} color="#FFFFFF" />
+      
+      </TouchableOpacity>
     </SafeAreaView>
 
 //Componentes visuales
@@ -91,5 +92,15 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
-
+  newTaskButton: {
+    position: 'absolute',
+    bottom: 32,
+    right: 32,
+    backgroundColor: '#007AFF',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
