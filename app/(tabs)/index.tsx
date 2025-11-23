@@ -62,7 +62,7 @@ return (
 //Componentes visuales
 
     <SafeAreaView style={styles.container}>
-      <Title>Todo List</Title>
+      <Title>To do List</Title>
       {todos.map((task) => (
         <TaskItem 
         key={task.id} 

@@ -5,6 +5,8 @@ type?: 'primary' | 'outlined' | 'success' | 'danger' | 'warning';
 text?: string;
 onPress?: () => void;
 style?: StyleProp<ViewStyle>
+disabled?: boolean;
+loading?: boolean;
 }
 
 export default function Button({
@@ -12,11 +14,13 @@ export default function Button({
     text,
     onPress,
     style,
+    disabled = false,
+    loading = false,
 }: ButtonProps) {
 return (
-    <TouchableOpacity style={[styles.button, styles[type], style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, styles[type], style, (disabled || loading) && styles.disabled]} onPress={onPress} disabled={disabled || loading}>
     <Text style={[styles.buttonText, type === 'outlined' && styles.buttonTextOutlined]}>
-        {text}
+        {loading ? "Cargando..." : text}
     </Text>
     </TouchableOpacity>
     );
@@ -54,5 +58,8 @@ buttonText: {
 },
 buttonTextOutlined: {
     color: '#4CD964',
+},
+disabled: {
+    opacity: 0.6,
 },
 });

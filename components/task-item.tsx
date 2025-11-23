@@ -28,6 +28,11 @@ export function TaskItem({ task, onToggle, onRemove }: TaskItemProps) {
       <Text style={[styles.title, task.completed && styles.completedTitle]}>
         {task.title}
       </Text>
+      {task.coordinates && (
+        <Text style={ { fontSize: 12, color: '#666', marginLeft: 8 } }>
+          Lat: {task.coordinates.latitude}, Lon: {task.coordinates.longitude}
+        </Text>
+      )}
       <TouchableOpacity style={styles.removeButton} onPress={() => onRemove?.(task.id)}>
         <IconSymbol name="trash.circle" size={24} color="#FF3B30" />
       </TouchableOpacity>

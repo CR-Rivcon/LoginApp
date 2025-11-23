@@ -12,7 +12,9 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Esta aplicación necesita acceso a la cámara para tomar fotos.",
-        "NSPhotoLibraryUsageDescription": "Esta aplicación necesita acceso a la biblioteca de fotos para seleccionar imágenes."
+        "NSPhotoLibraryUsageDescription": "Esta aplicación necesita acceso a la biblioteca de fotos para seleccionar imágenes.",
+        "NSlocationWhenInUseUsageDescription": "Esta aplicación necesita acceso a tu ubicación para mejorar la experiencia del usuario."
+
       }
     },
     "android": {

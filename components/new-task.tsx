@@ -3,8 +3,10 @@ import Title from "@/components/ui/title";
 import { Task } from "@/constants/types";
 import { useCameraPermissions } from "expo-camera";
 import { launchCameraAsync } from 'expo-image-picker';
+import { Accuracy, getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
 import { useState } from "react";
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+
 
 interface NewTaskProps {
     onClose: () => void;
@@ -50,18 +52,36 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
     }
     async function handleSaveTask() {
         if (isSaving) return;
+        let location = null;
         try {
             setIsSaving(true);
+            try {
+            const {status} = await requestForegroundPermissionsAsync();
+            if (status === 'granted') {
+                const locationResult = await getCurrentPositionAsync({
+                    accuracy: Accuracy.Balanced
+                });
+                location = {
+                    latitude: locationResult.coords.latitude.toFixed(6),
+                    longitude: locationResult.coords.longitude.toFixed(6),
+                };
+            } catch (locationError) {
+                console.error("Error obteniendo la ubicación", locationError);
+            }
+
             const newTask: Task = {
                 id: Date.now().toString(),
                 title: taskTitle,
                 completed: false,
                 photoUri: photoUri || undefined,
+                coordinates?: location || {
+                    latitude: '1.234567',
+                    longitude: '-2.345678',
+                }
             };
             onTaskSave?.(newTask);
             onClose();
-            }
-            catch (error) {
+        } catch (error) {
             console.error("Error guardando la tarea", error);
             Alert.alert("Error", "No se pudo guardar la tarea. Intenta de nuevo.");
         } finally {
@@ -103,7 +123,7 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
 
 
         <View style= {{ gap: 12, flexDirection: 'column', marginTop: 96}}>
-        <Button type="primary" text="Agregar Tarea" onPress={handleSaveTask} />
+        <Button type="primary" text="Agregar Tarea" onPress={handleSaveTask} disabled={!taskTitle.trim() || isSaving} />
         <Button type="danger" text="Cancelar" onPress={onClose} />            
         </View>
         </View>
@@ -147,6 +167,3 @@ const styles =  StyleSheet.create({
         fontSize: 16,
     },
 });
-
-
-

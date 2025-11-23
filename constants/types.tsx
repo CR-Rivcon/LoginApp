@@ -3,8 +3,8 @@ export interface Task {
     title: string;
     completed: boolean;
     coordinates?: {
-        latitude: number;
-        longitude: number;
+        latitude: string;
+        longitude: string;
     };
     photoUri?: string;
 }
