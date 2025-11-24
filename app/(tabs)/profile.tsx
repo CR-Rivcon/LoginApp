@@ -3,57 +3,46 @@ import { useRouter } from 'expo-router';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function ProfileScreen() {
-const { user, logout } = useAuth();
-const router = useRouter();
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
-const handleLogout = () => {
-logout();
-router.replace('/login');
-};
-const handlePerfil = () => {
-router.push('/(tabs)/perfil');
-};
+  const handleLogout = () => {
+    logout();
+    router.replace('/login');
+  };
 
-return (
+  const handlePerfil = () => {
+    router.push('/(tabs)/perfil');
+  };
+
+  const handleLibreta = () => {
+    router.push('/(tabs)');
+  };
+
+  return (
     <SafeAreaView style={styles.safe}>
-    <ScrollView contentContainerStyle={styles.scroll}>
-    <Text style={styles.header}>Bienvenido {user?.name}</Text>
-    <Text style={styles.description}>
-        Usted ha ingresado con éxito. A continuación se presentan las opciones para su perfil.
-    </Text>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <Text style={styles.header}>Bienvenido {user?.name}</Text>
+        <Text style={styles.description}>
+          Usted ha ingresado con éxito. A continuación se presentan las opciones del menú.
+        </Text>
 
-    <View style={styles.buttonsWrap}>
-        <Pressable style={styles.button} onPress={handlePerfil}>
-        <Text style={styles.buttonText}>Ver Perfil</Text>
-        </Pressable>
+        <View style={styles.buttonsWrap}>
+          <Pressable style={styles.button} onPress={handlePerfil}>
+            <Text style={styles.buttonText}>Ver Perfil</Text>
+          </Pressable>
 
-        <Pressable style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Revisar Actividad</Text>
-        </Pressable>
+          <Pressable style={styles.button} onPress={handleLibreta}>
+            <Text style={styles.buttonText}>Libreta de tareas</Text>
+          </Pressable>
 
-        <Pressable style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Realizar Movimiento</Text>
-        </Pressable>
-
-        <Pressable style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Solicitar Ayuda</Text>
-        </Pressable>
-
-        <Pressable style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Pago de Membresía</Text>
-        </Pressable>
-
-        <Pressable style={[styles.button, styles.logout]} onPress={handleLogout}>
-        <Text style={[styles.buttonText, styles.logoutText]}>Logout</Text>
-        </Pressable>
-    </View>
-
-    <Text style={styles.note}>
-        Las opciones se encuentran en mantenimiento, favor ingrese más tarde.
-    </Text>
-    </ScrollView>
-</SafeAreaView>
-);
+          <Pressable style={[styles.button, styles.logout]} onPress={handleLogout}>
+            <Text style={[styles.buttonText, styles.logoutText]}>Logout</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -94,11 +83,4 @@ button: {
 buttonText: { color: '#000', fontWeight: '600', fontSize: 16 },
 logout: { backgroundColor: '#ff5959' },
 logoutText: { color: '#fff' },
-note: {
-    marginTop: 24,
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    paddingHorizontal: 10,
-},
 });

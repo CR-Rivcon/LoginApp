@@ -1,62 +1,118 @@
-# Welcome to your Expo app 👋
+# LoginApp - Aplicación de Gestión de Tareas
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 📋 Descripción del Proyecto
 
-## Get started
+LoginApp es una aplicación móvil desarrollada con React Native y Expo que permite a los usuarios autenticarse y gestionar sus tareas personales. La aplicación cuenta con un sistema de login, registro de usuarios y una interfaz intuitiva para crear, visualizar y administrar una lista de tareas (To-Do List).
 
-1. Install dependencies
+### Características Principales
 
-   ```bash
-   npm install
-   ```
+- **Sistema de Autenticación**: Login y logout de usuarios con almacenamiento local
+- **Gestión de Tareas**: Crear, completar y eliminar tareas personalizadas
+- **Perfil de Usuario**: Visualización de información del usuario
+- **Navegación por Tabs**: Interfaz intuitiva con navegación entre diferentes secciones
+- **Almacenamiento Persistente**: Las tareas se guardan localmente en el dispositivo
 
-2. Start the app
+## 👥 Información del Proyecto
 
-   ```bash
-   npx expo start
-   ```
+**Estudiantes:**
+- Chirlett Jaqueline Teixeira Pino
+- Cristopher Andrés Rivera Concha
 
-In the output, you'll find options to open the app in a
+**Profesor:** Boris Marcelo Belmar Muñoz
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**Asignatura:** Desarrollo de Aplicaciones Móviles
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+**Institución:** Instituto Profesional Santo Tomás
 
-## Get a fresh project
+## 🚀 Instalación y Ejecución
 
-When you're ready, run:
+### Requisitos Previos
 
+- Node.js instalado
+- npm o yarn
+- Expo Go (para pruebas en dispositivo móvil)
+
+### Pasos de Instalación
+
+1. Clonar el repositorio:
 ```bash
-npm run reset-project
+git clone <url-del-repositorio>
+cd LoginApp
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Instalar dependencias:
+```bash
+npm install
+```
 
-## Learn more
+3. Iniciar la aplicación:
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+4. Abrir la aplicación:
+   - Escanear el código QR con Expo Go (Android/iOS)
+   - Presionar `a` para abrir en emulador Android
+   - Presionar `i` para abrir en simulador iOS
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📱 Estructura de la Aplicación
 
-## Join the community
+```
+LoginApp/
+├── app/
+│   ├── (tabs)/
+│   │   ├── index.tsx        # Pantalla principal (Lista de tareas)
+│   │   ├── profile.tsx      # Menú principal
+│   │   └── perfil.tsx       # Detalles del perfil
+│   ├── login.tsx            # Pantalla de login
+│   └── _layout.tsx          # Layout principal
+├── components/
+│   ├── context/
+│   │   └── auth_context.tsx # Contexto de autenticación
+│   ├── new-task.tsx         # Componente para crear tareas
+│   ├── task-item.tsx        # Componente de item de tarea
+│   └── ui/                  # Componentes de interfaz
+├── utils/
+│   └── storage.ts           # Funciones de almacenamiento local
+└── constants/
+    ├── theme.ts             # Tema y colores
+    └── types.tsx            # Definiciones de tipos
+```
 
-Join our community of developers creating universal apps.
+## 🛠️ Tecnologías Utilizadas
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **React Native**: Framework para desarrollo móvil
+- **Expo**: Plataforma de desarrollo
+- **TypeScript**: Lenguaje de programación
+- **AsyncStorage**: Almacenamiento local persistente
+- **Expo Router**: Navegación basada en archivos
 
-## Demo de login
+## 📺 Demo
 
-<video controls width="720">
-  <source src="https://raw.githubusercontent.com/CR-Rivcon/LoginApp/main/video/login-demo.mp4" type="video/mp4">
-  Tu navegador no soporta la etiqueta <code>video</code>. Puedes descargar el video aquí:
-  [Descargar demo](./video/login-demo.mp4)
-</video>
+[Video de funcionamiento](https://ipciisa-my.sharepoint.com/:v:/g/personal/cristopher_rivera_concha_estudiante_ipss_cl/ER8_BD703GdGtWSNAH7uoLEB6pINSMZt4Z63u_TIQLE3VA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=L1gzYt)
 
+## 📝 Funcionalidades
 
+### Autenticación
+- Login de usuarios registrados
+- Cierre de sesión
+- Persistencia de sesión
 
-[Video funcionamiento:]( https://ipciisa-my.sharepoint.com/:v:/g/personal/cristopher_rivera_concha_estudiante_ipss_cl/ER8_BD703GdGtWSNAH7uoLEB6pINSMZt4Z63u_TIQLE3VA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=L1gzYt)
+### Gestión de Tareas
+- Crear nuevas tareas con título y descripción
+- Marcar tareas como completadas
+- Eliminar tareas
+- Visualización personalizada por usuario
+
+### Perfil
+- Visualización de información del usuario
+- Navegación entre secciones
+- Menú con accesos directos
+
+## 📄 Licencia
+
+Este proyecto fue desarrollado con fines académicos para la asignatura de Desarrollo de Aplicaciones Móviles.
+
+---
+
+**Evaluación 1 - Tercer Trimestre 2025**
