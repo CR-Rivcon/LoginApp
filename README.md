@@ -2,7 +2,7 @@
 
 ## 📋 Descripción del Proyecto
 
-LoginApp es una aplicación móvil desarrollada con React Native y Expo que permite a los usuarios autenticarse y gestionar sus tareas personales. La aplicación cuenta con un sistema de login, registro de usuarios y una interfaz intuitiva para crear, visualizar y administrar una lista de tareas (To-Do List).
+LoginApp es una aplicación móvil desarrollada con React Native y Expo que permite a los usuarios autenticarse y gestionar sus tareas personales. La aplicación cuenta con un sistema de login, registro de usuarios y una interfaz intuitiva para crear, visualizar y administrar una lista de tareas, indicando ademas coordenadas e imagenes del registro (To-Do List).
 
 ### Características Principales
 
@@ -115,4 +115,4 @@ Este proyecto fue desarrollado con fines académicos para la asignatura de Desar
 
 ---
 
-**Evaluación 1 - Tercer Trimestre 2025**
+**Evaluación 2 - Tercer Trimestre 2025**
