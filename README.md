@@ -22,7 +22,7 @@ LoginApp es una aplicación móvil desarrollada con React Native y Expo que perm
 
 **Asignatura:** Desarrollo de Aplicaciones Móviles
 
-**Institución:** Instituto Profesional Santo Tomás
+**Institución:** Instituto Profesional San Sebastian
 
 ## 🚀 Instalación y Ejecución
 
