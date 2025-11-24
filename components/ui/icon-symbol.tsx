@@ -22,6 +22,7 @@ const MAPPING = {
   'trash.circle': 'delete',
   'plus.circle.fill': 'add-circle',
   'plus': 'add',
+  'line.3.horizontal': 'menu',
 } as IconMapping;
 
 /**

@@ -30,6 +30,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="line.3.horizontal" color={color} />,
         }}
       />
+      <Tabs.Screen
+        name="perfil"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
