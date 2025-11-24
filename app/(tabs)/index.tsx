@@ -1,35 +1,55 @@
+import { useAuth } from '@/components/context/auth_context';
 import NewTask from '@/components/new-task';
 import { TaskItem } from '@/components/task-item';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import Title from '@/components/ui/title';
 import { Task } from '@/constants/types';
-import { useState } from 'react';
+import { loadTodosFromStorage, saveTodosToStorage } from '@/utils/storage';
+import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import generateRandomId from '../utils/generate-random-id';
 
-const initialTodos: Task[] = [
-  { id: generateRandomId(), title: 'Comprar víveres', completed: false },
-  { id: generateRandomId(), title: 'Llevar el auto al taller', completed: false },
-  { id: generateRandomId(), title: 'Pagar las facturas', completed: false },
-];
+
 
 export default function Home() {
 
-  const [todos, setTodos] = useState<Task[]>(initialTodos);
+
+  const { user } = useAuth();
+  const [todos, setTodos] = useState<Task[]>([]);
+  const [allTodos, setAllTodos] = useState<Task[]>([]);
   const [creatingNew, setCreatingNew] = useState<boolean>(false);
+  const userTodos = todos.filter((todo) => todo.userId === (user ? user.id : ''));
+  useEffect(() => {
 
-
+    loadTodosFromStorage()
+    .then((LoadedTodos) => {
+      setAllTodos(LoadedTodos);
+      setTodos(LoadedTodos.filter((todo) => todo.userId === (user ? user.id : '')));
+    });
+  }, [user]);
 
 
   const createTask = (task : Task) => {
     if (task.title.trim().length === 0) return;
+    setAllTodos((prevAllTodos) => {
+      const updatedAllTodos = [...prevAllTodos, task];
+      console.log('Guardando tareas:', updatedAllTodos.length);
+      saveTodosToStorage(updatedAllTodos);
+      return updatedAllTodos;
+    });
     setTodos((prevTodos) => [...prevTodos, task]);
     setCreatingNew(false);
   }
 
 
   const toggleTodo = (id: string) => {
+    setAllTodos((prevAllTodos) => {
+      const updatedAllTodos = prevAllTodos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+      saveTodosToStorage(updatedAllTodos);
+      return updatedAllTodos;
+    });
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id
@@ -39,6 +59,11 @@ export default function Home() {
     );
   }
   const removeTodo = (id: string) => {
+    setAllTodos((prevAllTodos) => {
+      const updatedAllTodos = prevAllTodos.filter((todo) => todo.id !== id);
+      saveTodosToStorage(updatedAllTodos);
+      return updatedAllTodos;
+    });
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   }
 
@@ -61,7 +86,7 @@ return (
 
     <SafeAreaView style={styles.container}>
       <Title>To do List</Title>
-      {todos.map((task) => (
+      {userTodos.map((task) => (
         <TaskItem 
         key={task.id} 
         task={task}

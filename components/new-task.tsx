@@ -6,6 +6,7 @@ import { launchCameraAsync } from 'expo-image-picker';
 import { Accuracy, getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
 import { useState } from "react";
 import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { useAuth } from "./context/auth_context";
 
 
 interface NewTaskProps {
@@ -13,13 +14,12 @@ interface NewTaskProps {
     onTaskSave: (task : Task) => void;
 }
 
-
-
 export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
     const [photoUri, setPhotoUri] =  useState<string | null>(null);
     const [taskTitle, setTaskTitle] = useState<string>("");
     const [isCapturingPhoto, setIsCapturingPhoto] = useState<boolean>(false);
     const [isSaving, setIsSaving] = useState<boolean>(false);
+    const { user } = useAuth();
     const [permission, requestPermission] = useCameraPermissions();
 
     async function handleTakePhoto() {
@@ -77,7 +77,8 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
                 coordinates: location || {
                     latitude: '1.234567',
                     longitude: '-2.345678',
-                }
+                },
+                userId: user ? user.id : '',
             };
             onTaskSave?.(newTask);
             onClose();
