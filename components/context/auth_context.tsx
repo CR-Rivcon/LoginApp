@@ -15,10 +15,8 @@ interface AuthContextProps {
 }
 
 const ExpectedUsers: Cred[] = [
-  { id: '1', name: 'cris', password: '1234' },
-  { id: '2', name: 'root', password: 'root' },
-  { id: '3', name: 'admin', password: 'admin' },
-  { id: '4', name: 'Chirlett', password: '1234' },
+  { id: '1', name: 'root', password: 'root' },
+  { id: '2', name: 'admin', password: 'admin' },
 ];
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
