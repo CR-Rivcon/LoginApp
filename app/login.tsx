@@ -1,15 +1,15 @@
-
 import { useAuth } from '@/components/context/auth_context';
+import Button from '@/components/ui/button';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
 
   const handlerUsernameChange = (text: string) => {
     setUsername(text);
@@ -19,24 +19,22 @@ export default function LoginScreen() {
     setPassword(text);
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     try {
-login(username, password);
-
-
+      await login(username, password);
     } catch (error) {
       Alert.alert("Login Failed", (error as Error).message);
     }
-}
+  }
 
 
   return (
     <View style={styles.container}>
       <Text style={styles.headertext }>Inicia Sesión Aquí</Text>
-      <Text style={styles.labeltext}>Nombre de Usuario</Text>
+      <Text style={styles.labeltext}>Email</Text>
       <TextInput 
       style={styles.cajadetexto} 
-      placeholder="Nombre de Usuario" 
+      placeholder="Email" 
       onChangeText={handlerUsernameChange} />
       <Text style={styles.labeltext}>Contraseña</Text>
       <TextInput 
@@ -44,12 +42,13 @@ login(username, password);
       placeholder="Contraseña" 
       onChangeText={handlerPasswordChange} 
       secureTextEntry />
-      <Pressable 
+      <Button 
       style={styles.button} 
-      onPress={handleLogin}>
-      <Text>Ingresar</Text>
-      </Pressable>
-      </View>
+      onPress= {handleLogin} 
+      disabled ={!username || !password} 
+      loading={loading} 
+      text= "Login"/>
+    </View>
   );
 }
 

@@ -1,6 +1,8 @@
-import { clearSessionFromStorage, loadSessionFromStorage, saveSessionToStorage } from '@/utils/storage';
+import getAuthService from '@/services/auth-service';
+import { clearSessionFromStorage, loadSessionFromStorage } from '@/utils/storage';
 import { router } from 'expo-router';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 
 export interface User {
   id: string;
@@ -12,17 +14,16 @@ interface AuthContextProps {
   user: User | null;
   login: (username: string, password: string) => void;
   logout: () => void;
+  loading: boolean;
 }
 
-const ExpectedUsers: Cred[] = [
-  { id: '1', name: 'root', password: 'root' },
-  { id: '2', name: 'admin', password: 'admin' },
-];
+
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -43,13 +44,21 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
 
 
-  const login = (username: string, password: string) => {
-    const foundUser = ExpectedUsers.find(u => u.name === username && u.password === password);
-    if (!foundUser) {
-      throw new Error('Credenciales inválidas');
+  const login = async (username: string, password: string) => {
+    const authClient = getAuthService();
+    setLoading(true);
+
+    try {
+      const loginResponse = await authClient.login({ email: username, password });
+      const token = loginResponse.data.token;
+
+      console.log('Token recibido:', token);
+      Alert.alert('Login exitoso');
+    } catch (error) {
+      Alert.alert('Error de login', (error as Error).message);
+    } finally {
+      setLoading(false);
     }
-    setUser({ id: foundUser.id, name: foundUser.name });
-    saveSessionToStorage({ id: foundUser.id, name: foundUser.name });
   };
 
   const logout = () => {
@@ -57,7 +66,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     clearSessionFromStorage();
   };
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, login, logout, loading }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
