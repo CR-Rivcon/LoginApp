@@ -22,7 +22,7 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.header}>Bienvenido {user?.name}</Text>
+        <Text style={styles.header}>Bienvenido {user?.email}</Text>
         <Text style={styles.description}>
           Usted ha ingresado con éxito. A continuación se presentan las opciones del menú.
         </Text>

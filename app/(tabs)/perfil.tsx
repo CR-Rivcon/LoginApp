@@ -16,7 +16,7 @@ export default function Perfil() {
       <Text style={styles.title}>Perfil</Text>
       {user ? (
         <>
-          <Text style={styles.field}>Nombre: {user.name}</Text>
+          <Text style={styles.field}>Nombre: {user.email}</Text>
           <Text style={styles.field}>ID: {user.id}</Text>
           <Text style={styles.field}>Usted se encuentra al dia con sus pagos</Text>
           <Text style={styles.field}>No presenta notifaciones nuevas</Text>

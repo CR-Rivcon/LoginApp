@@ -1,14 +1,24 @@
 import getAuthService from '@/services/auth-service';
-import { clearSessionFromStorage, loadSessionFromStorage } from '@/utils/storage';
+import { clearSessionFromStorage, loadSessionFromStorage, saveSessionToStorage } from '@/utils/storage';
 import { router } from 'expo-router';
+import { decodeJwt } from 'jose';
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
+
+
 export interface User {
   id: string;
-  name: string;
+  email: string;
+  token: string;
 }
-type Cred = { id: string; name: string; password: string };
+
+export interface JwtPayload {
+  sub: string;
+  email: string;
+}
+
+
 
 interface AuthContextProps {
   user: User | null;
@@ -51,9 +61,21 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const loginResponse = await authClient.login({ email: username, password });
       const token = loginResponse.data.token;
+      const descodedToken = decodeJwt<JwtPayload>(token);
 
-      console.log('Token recibido:', token);
-      Alert.alert('Login exitoso');
+      const loggedInUser: User = {
+        id: descodedToken.sub,
+        email: descodedToken.email,
+        token,
+      }
+      setUser(loggedInUser);
+      saveSessionToStorage(loggedInUser);
+
+      
+
+
+
+
     } catch (error) {
       Alert.alert('Error de login', (error as Error).message);
     } finally {
