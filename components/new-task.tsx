@@ -1,6 +1,7 @@
 import Button from "@/components/ui/button";
 import Title from "@/components/ui/title";
 import { Task } from "@/constants/types";
+import getTodoService from "@/services/todo-service";
 import { useCameraPermissions } from "expo-camera";
 import { launchCameraAsync } from 'expo-image-picker';
 import { Accuracy, getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
@@ -11,10 +12,10 @@ import { useAuth } from "./context/auth_context";
 
 interface NewTaskProps {
     onClose: () => void;
-    onTaskSave: (task : Task) => void;
+    onTaskCreated: (task : Task) => void;
 }
 
-export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
+export default function NewTask ( {onClose, onTaskCreated}: NewTaskProps) {
     const [photoUri, setPhotoUri] =  useState<string | null>(null);
     const [taskTitle, setTaskTitle] = useState<string>("");
     const [isCapturingPhoto, setIsCapturingPhoto] = useState<boolean>(false);
@@ -61,8 +62,8 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
                     accuracy: Accuracy.Balanced
                 });
                 location = {
-                    latitude: locationResult.coords.latitude.toFixed(6),
-                    longitude: locationResult.coords.longitude.toFixed(6),
+                    latitude: Number(locationResult.coords.latitude.toFixed(6)),
+                    longitude: Number(locationResult.coords.longitude.toFixed(6)),
                 };
             }
             } catch (locationError) {
@@ -74,13 +75,12 @@ export default function NewTask ( {onClose, onTaskSave}: NewTaskProps) {
                 title: taskTitle,
                 completed: false,
                 photoUri: photoUri || undefined,
-                coordinates: location || {
-                    latitude: '1.234567',
-                    longitude: '-2.345678',
-                },
-                userId: user ? user.id : '',
+                location: location || undefined,
+                userId: user ? user.id :"",
             };
-            onTaskSave?.(newTask);
+            const todoService = getTodoService({ token: user!.token });
+            await todoService.createTodo(newTask);
+            onTaskCreated(newTask);
             onClose();
         } catch (error) {
             console.error("Error guardando la tarea", error);

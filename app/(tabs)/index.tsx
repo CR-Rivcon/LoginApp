@@ -4,44 +4,43 @@ import { TaskItem } from '@/components/task-item';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import Title from '@/components/ui/title';
 import { Task } from '@/constants/types';
-import { loadTodosFromStorage, saveTodosToStorage } from '@/utils/storage';
-import { useEffect, useState } from 'react';
+import getTodoService from '@/services/todo-service';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
   const { user } = useAuth();
   const [todos, setTodos] = useState<Task[]>([]);
-  const [allTodos, setAllTodos] = useState<Task[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [creatingNew, setCreatingNew] = useState<boolean>(false);
 
+  const fetchTodos = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      const todoService = getTodoService({ token: user.token });
+      const response = await todoService.getTodos();
+      setTodos(response.data);
+    } catch (error) {
+      console.error('Error fetching todos:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]); // Depend on user to re-
+
+
   useEffect(() => {
-    loadTodosFromStorage().then((LoadedTodos) => {
-      setAllTodos(LoadedTodos);
-      setTodos(LoadedTodos.filter((todo) => todo.userId === (user ? user.id : '')));
-    });
-  }, [user]);
+    if (user) {
+      fetchTodos();
+    }
+  }, [user, fetchTodos]);
 
-
-  const createTask = (task: Task) => {
-    if (task.title.trim().length === 0) return;
-    setAllTodos((prevAllTodos) => {
-      const updatedAllTodos = [...prevAllTodos, task];
-      saveTodosToStorage(updatedAllTodos);
-      return updatedAllTodos;
-    });
-    setTodos((prevTodos) => [...prevTodos, task]);
+  const onTaskCreated = (task: Task) => {
+    fetchTodos();
     setCreatingNew(false);
-  };
-
+  }
   const toggleTodo = (id: string) => {
-    setAllTodos((prevAllTodos) => {
-      const updatedAllTodos = prevAllTodos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      );
-      saveTodosToStorage(updatedAllTodos);
-      return updatedAllTodos;
-    });
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id
@@ -52,11 +51,6 @@ export default function Home() {
   };
 
   const removeTodo = (id: string) => {
-    setAllTodos((prevAllTodos) => {
-      const updatedAllTodos = prevAllTodos.filter((todo) => todo.id !== id);
-      saveTodosToStorage(updatedAllTodos);
-      return updatedAllTodos;
-    });
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
@@ -67,14 +61,15 @@ export default function Home() {
   if (creatingNew) {
     return (
       <SafeAreaView style={styles.container}>
-        <NewTask onClose={handleNewTaskClose} onTaskSave={createTask} />
+        <NewTask onClose={handleNewTaskClose} onTaskCreated={onTaskCreated} />
       </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Title>To do List de {user?.name}</Title>
+      <Title>To do List de {user?.email}</Title>
+      {loading && <Title>Cargando tareas...</Title>}
       {todos.map((task) => (
         <TaskItem
           key={task.id}
@@ -83,7 +78,10 @@ export default function Home() {
           onRemove={removeTodo}
         />
       ))}
-      <TouchableOpacity style={styles.newTaskButton} onPress={() => setCreatingNew(true)}>
+      <TouchableOpacity
+        style={styles.newTaskButton}
+        onPress={() => setCreatingNew(true)}
+      >
         <IconSymbol name="plus" size={32} color="#FFFFFF" />
       </TouchableOpacity>
     </SafeAreaView>
