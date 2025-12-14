@@ -5,8 +5,8 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import Title from '@/components/ui/title';
 import { Task } from '@/constants/types';
 import getTodoService from '@/services/todo-service';
-import { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
@@ -15,19 +15,22 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [creatingNew, setCreatingNew] = useState<boolean>(false);
 
-  const fetchTodos = useCallback(async () => {
-    if (!user) return;
+
+
+  const todoService = useMemo(() => user ? getTodoService({ token: user.token }) : null, [user]);
+
+  const fetchTodos = useCallback(async () => {  
+    if (!user || !todoService) return;
     setLoading(true);
     try {
-      const todoService = getTodoService({ token: user.token });
-      const response = await todoService.getTodos();
+      const response = await todoService?.getTodos();
       setTodos(response.data);
     } catch (error) {
       console.error('Error fetching todos:', error);
     } finally {
       setLoading(false);
     }
-  }, [user]); // Depend on user to re-
+  }, [user, todoService]);
 
 
   useEffect(() => {
@@ -40,18 +43,36 @@ export default function Home() {
     fetchTodos();
     setCreatingNew(false);
   }
-  const toggleTodo = (id: string) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id
-          ? { ...todo, completed: !todo.completed }
-          : todo
-      )
-    );
+  const toggleTodo = async (id: string) => {
+    const updatedTodo = todos.find((todo) => todo.id === id);
+
+    if (todoService && updatedTodo !== undefined) {
+      try {
+        setLoading(true);
+        await todoService.updateTodo(id, {
+          ...updatedTodo,
+          completed: !updatedTodo.completed
+        });
+        await fetchTodos();
+      } catch (error) {
+        Alert.alert('Error', (error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
-  const removeTodo = (id: string) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const removeTodo = async (id: string) => {
+    if (!todoService) return;
+    try {
+      setLoading(true);
+      await todoService.deleteTodo(id);
+      await fetchTodos();
+    } catch (error) {
+      Alert.alert('Error', (error as Error).message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleNewTaskClose = () => {

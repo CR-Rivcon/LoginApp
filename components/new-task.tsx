@@ -40,7 +40,10 @@ export default function NewTask ( {onClose, onTaskCreated}: NewTaskProps) {
                 allowsEditing: false,
                 exif: false,
             });
+
+
             if (!result.canceled && result.assets.length > 0) {
+                const photoAsBlob = await fetch(result.assets[0].uri).then(res => res.blob());
                 setPhotoUri(result.assets[0].uri);
             }
         } catch (error) {

@@ -34,9 +34,9 @@ export default function getTodoService({ token }: { token: string }) {
                     throw new Error('Unauthorized, ingresa de nuevo.');
                 }
             }
-            }
             throw new Error('Error conectando al servicio de tareas, intenta de nuevo mas tarde.');
-            }
+        }
+    }
  
  
     async function createTodo(task: Task): Promise<void> {
@@ -51,9 +51,38 @@ export default function getTodoService({ token }: { token: string }) {
             throw new Error('Error conectando al servicio de tareas, intenta de nuevo mas tarde.');
         }
     }
+    async function deleteTodo(id: string): Promise<void> {
+        try {
+            await client.delete(`/todos/${id}`);
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw new Error('Unauthorized, ingresa de nuevo.');
+                }
+            }
+            console.error('Error conectando al servicio de tareas, intenta de nuevo mas tarde.', error);
+            throw new Error('Error conectando al servicio de tareas, intenta de nuevo mas tarde.');
+        }
+    }
+
+    async function updateTodo(id: string, updates: Partial<Task>): Promise<void> {
+        try {
+            await client.put(`/todos/${id}`, updates);
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw new Error('Unauthorized, ingresa de nuevo.');
+                }
+            }
+            console.error('Error conectando al servicio de tareas, intenta de nuevo mas tarde.', error);
+            throw new Error('Error conectando al servicio de tareas, intenta de nuevo mas tarde.');
+        }
+    }
 
     return {
         getTodos,
         createTodo,
+        deleteTodo,
+        updateTodo,
     };
 }

@@ -7,14 +7,16 @@ interface TaskItemProps {
 task: Task;
 onToggle?: (id: string) => void;
 onRemove?: (id: string) => void;
+loading?: boolean;
 }
 
-export function TaskItem({ task, onToggle, onRemove }: TaskItemProps) {
+export function TaskItem({ task, onToggle, onRemove, loading }: TaskItemProps) {
   return (
     <View style={styles.taskContainer}>
       <TouchableOpacity
         style={[styles.circle, task.completed && styles.completedCircle]}
         onPress={() => onToggle?.(task.id)}
+        disabled={loading}
         hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
       />
       <View>
@@ -33,7 +35,7 @@ export function TaskItem({ task, onToggle, onRemove }: TaskItemProps) {
           Lat: {task.location.latitude}, Lon: {task.location.longitude}
         </Text>
       )}
-      <TouchableOpacity style={styles.removeButton} onPress={() => onRemove?.(task.id)}>
+      <TouchableOpacity style={styles.removeButton} onPress={() => onRemove?.(task.id)} disabled={loading}>
         <IconSymbol name="trash.circle" size={24} color="#FF3B30" />
       </TouchableOpacity>
     </View>
