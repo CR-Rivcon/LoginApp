@@ -5,12 +5,14 @@ import { IconSymbol } from '@/components/ui/icon-symbol';
 import Title from '@/components/ui/title';
 import { Task } from '@/constants/types';
 import getTodoService from '@/services/todo-service';
+import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
-  const { user } = useAuth();
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const [todos, setTodos] = useState<Task[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [creatingNew, setCreatingNew] = useState<boolean>(false);
@@ -26,11 +28,17 @@ export default function Home() {
       const response = await todoService?.getTodos();
       setTodos(response.data);
     } catch (error) {
+      Alert.alert('Error', (error as Error).message);
+      if ((error as Error).message === 'Unauthorized') {
+        Alert.alert('Session expired', 'Please log in again.');
+        logout();
+        router.replace('/login');
+      }
       console.error('Error fetching todos:', error);
     } finally {
       setLoading(false);
     }
-  }, [user, todoService]);
+  }, [user, todoService, logout, router]);
 
 
   useEffect(() => {
