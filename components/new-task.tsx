@@ -5,6 +5,7 @@ import getImageUploadService from "@/services/image-upload-service";
 import getTodoService from "@/services/todo-service";
 import { useCameraPermissions } from "expo-camera";
 import { launchCameraAsync } from 'expo-image-picker';
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import { Accuracy, getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
 import { useState } from "react";
 import { Alert, Image, Platform, StyleSheet, Text, TextInput, View } from "react-native";
@@ -37,25 +38,29 @@ export default function NewTask ( {onClose, onTaskCreated}: NewTaskProps) {
                 }
             }
             const result = await launchCameraAsync({
-                quality: 0.7,
+                quality: 0.5,
                 allowsEditing: false,
                 exif: false,
             });
 
 
             if (!result.canceled && result.assets.length > 0) {
+                // Redimensionar imagen para evitar error 413
+                const manipulated = await manipulateAsync(
+                    result.assets[0].uri,
+                    [{ resize: { width: 800 } }],
+                    { compress: 0.6, format: SaveFormat.JPEG }
+                );
+                
                 const imageUploadService = getImageUploadService({ token: user!.token });   
                 const formData = new FormData();
-                const uriRaw = result.assets[0].uri;
-                const uri = Platform.OS === 'android' && !uriRaw.startsWith('file://') ? `file://${uriRaw}` : uriRaw;
-                const uriParts = uri.split('.');
-                const fileType = uriParts[uriParts.length - 1];
+                const uri = Platform.OS === 'android' && !manipulated.uri.startsWith('file://') ? `file://${manipulated.uri}` : manipulated.uri;
 
 
                 formData.append('image', {
                     uri,
-                    name: `photo.${fileType}`,
-                    type: `image/${fileType}`,
+                    name: 'photo.jpg',
+                    type: 'image/jpeg',
                 } as any);
                 
                 const uploadedImageUrl = await imageUploadService.uploadImage(formData);
