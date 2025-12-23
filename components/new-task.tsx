@@ -1,12 +1,13 @@
 import Button from "@/components/ui/button";
 import Title from "@/components/ui/title";
 import { Task } from "@/constants/types";
+import getImageUploadService from "@/services/image-upload-service";
 import getTodoService from "@/services/todo-service";
 import { useCameraPermissions } from "expo-camera";
 import { launchCameraAsync } from 'expo-image-picker';
 import { Accuracy, getCurrentPositionAsync, requestForegroundPermissionsAsync } from "expo-location";
 import { useState } from "react";
-import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Image, Platform, StyleSheet, Text, TextInput, View } from "react-native";
 import { useAuth } from "./context/auth_context";
 
 
@@ -43,8 +44,24 @@ export default function NewTask ( {onClose, onTaskCreated}: NewTaskProps) {
 
 
             if (!result.canceled && result.assets.length > 0) {
-                const photoAsBlob = await fetch(result.assets[0].uri).then(res => res.blob());
-                setPhotoUri(result.assets[0].uri);
+                const imageUploadService = getImageUploadService({ token: user!.token });   
+                const formData = new FormData();
+                const uriRaw = result.assets[0].uri;
+                const uri = Platform.OS === 'android' && !uriRaw.startsWith('file://') ? `file://${uriRaw}` : uriRaw;
+                const uriParts = uri.split('.');
+                const fileType = uriParts[uriParts.length - 1];
+
+
+                formData.append('image', {
+                    uri,
+                    name: `photo.${fileType}`,
+                    type: `image/${fileType}`,
+                } as any);
+                
+                const uploadedImageUrl = await imageUploadService.uploadImage(formData);
+
+
+                setPhotoUri(uploadedImageUrl);
             }
         } catch (error) {
             console.error("Error tomando la foto", error);
