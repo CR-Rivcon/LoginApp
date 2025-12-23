@@ -157,6 +157,7 @@ const styles =  StyleSheet.create({
     container: { flex: 1 },
     inputContainer : {
         marginTop: 16,
+        marginBottom: 16, 
     },
     label : {
         fontSize: 16,
