@@ -190,4 +190,4 @@ Este proyecto fue desarrollado con fines académicos para la asignatura de Desar
 
 ---
 
-**Evaluación 3 - Tercer Trimestre 2025**
+**Evaluación Examen Final - Tercer Trimestre 2025**
