@@ -158,6 +158,15 @@ LoginApp/
 - Información extraída del token JWT
 - Navegación entre secciones mediante tabs
 
+### Manejo de Imagenes
+- Funcionalidad para subida de imagenes, alojadas en servidor externo conectado por backend
+- Optimizacion en manejo de imagenes para reducir el tamaño de subia
+
+### Utilizacion de CustoHook
+- Creacion de custom hook llamado use-todo-list.ts
+- Separacion del manejo de la logica de negocio de front
+- Mejora en experiencia del desarollador al limpiar interfaz de logica y funcionalidades
+
 ## � API Backend
 
 La aplicación consume la API REST documentada en:
